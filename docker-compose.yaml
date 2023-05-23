@@ -1,0 +1,13 @@
+version: '3'
+services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: roco
+      POSTGRES_PASSWORD: tarea3
+      POSTGRES_DB: jagger-sensors
+    ports:
+      - "5435:5432"
+    volumes:
+      - ./scripts/db/db.sql:/docker-entrypoint-initdb.d/db.sql
