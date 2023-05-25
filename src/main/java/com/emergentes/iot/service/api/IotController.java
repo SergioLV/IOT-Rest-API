@@ -1,20 +1,20 @@
 package com.emergentes.iot.service.api;
 
 
-import com.emergentes.iot.business.AdminService;
-import com.emergentes.iot.business.CompanyService;
-import com.emergentes.iot.business.LocationService;
-import com.emergentes.iot.business.TokenService;
+import com.emergentes.iot.business.*;
 import com.emergentes.iot.dto.requests.CompanyRequest;
 import com.emergentes.iot.dto.requests.LocationRequest;
 import com.emergentes.iot.dto.requests.LoginRequest;
+import com.emergentes.iot.dto.requests.SensorRequest;
 import com.emergentes.iot.dto.responses.CompanyResponse;
 import com.emergentes.iot.dto.responses.LocationResponse;
 import com.emergentes.iot.dto.responses.LoginResponse;
+import com.emergentes.iot.dto.responses.SensorResponse;
 import com.emergentes.iot.exceptions.*;
 import com.emergentes.iot.model.Admin;
 import com.emergentes.iot.model.Company;
 import com.emergentes.iot.model.Location;
+import com.emergentes.iot.model.Sensor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -38,9 +38,11 @@ public class IotController {
     @Autowired
     private LocationService locationService;
 
+    @Autowired
+    private SensorService sensorService;
+
     @PostMapping(value = "/login")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) throws LoginException, TokenGenerationException {
-
         ModelMapper modelMapper = new ModelMapper();
         Admin admin = modelMapper.map(request, Admin.class);
         String token = adminService.login(admin);
@@ -68,5 +70,13 @@ public class IotController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(new LocationResponse("New Location Added!", locationId));
     }
 
-
+    @PostMapping(value = "/sensor")
+    public ResponseEntity<SensorResponse> sensor(@RequestBody SensorRequest request, @RequestHeader("Authorization") String authorizationHeader) throws InvalidTokenException {
+        ModelMapper modelMapper = new ModelMapper();
+        Sensor sensor = modelMapper.map(request, Sensor.class);
+        String authToken = authorizationHeader.substring(7);
+        tokenService.checkToken(authToken);
+        Sensor sensorResponse  = sensorService.save(sensor);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(new SensorResponse("New Sensor added!", sensorResponse));
+    }
 }

@@ -33,7 +33,4 @@ public class CompanyDAO {
         return companyRepository.findByCompanyId(companyId);
     }
 
-//    private CompanyEntity getCompanyEntityByApiKeyValue(String apikey){
-//        return companyRepository.findById(apikey).orElse(null);
-//    }
 }

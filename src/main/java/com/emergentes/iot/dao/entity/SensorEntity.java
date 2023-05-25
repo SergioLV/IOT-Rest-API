@@ -1,8 +1,11 @@
 package com.emergentes.iot.dao.entity;
 
+import com.emergentes.iot.model.Sensor;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -10,12 +13,12 @@ import lombok.Setter;
 @Table(name = "sensor")
 public class SensorEntity {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "sensor_id")
     private Long sensorId;
 
-    @ManyToOne
-    @JoinColumn(name = "location_id")
-    private LocationEntity location;
+    @Column(name = "location_id")
+    private Long locationId;
 
     @Column(name = "sensor_name", length = 255)
     private String sensorName;
@@ -29,52 +32,18 @@ public class SensorEntity {
     @Column(name = "sensor_api_key", length = 255)
     private String sensorApiKey;
 
-    public Long getSensorId() {
-        return sensorId;
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "location_id", insertable = false, updatable = false)
+    private LocationEntity location;
 
-    public void setSensorId(Long sensorId) {
-        this.sensorId = sensorId;
-    }
+    public SensorEntity(){}
 
-    public LocationEntity getLocation() {
-        return location;
-    }
-
-    public void setLocation(LocationEntity location) {
-        this.location = location;
-    }
-
-    public String getSensorName() {
-        return sensorName;
-    }
-
-    public void setSensorName(String sensorName) {
-        this.sensorName = sensorName;
-    }
-
-    public String getSensorCategory() {
-        return sensorCategory;
-    }
-
-    public void setSensorCategory(String sensorCategory) {
-        this.sensorCategory = sensorCategory;
-    }
-
-    public String getSensorMeta() {
-        return sensorMeta;
-    }
-
-    public void setSensorMeta(String sensorMeta) {
-        this.sensorMeta = sensorMeta;
-    }
-
-    public String getSensorApiKey() {
-        return sensorApiKey;
-    }
-
-    public void setSensorApiKey(String sensorApiKey) {
-        this.sensorApiKey = sensorApiKey;
+    public SensorEntity(Sensor sensor){
+        this.locationId = sensor.getLocationId();
+        this.sensorName = sensor.getSensorName();
+        this.sensorCategory = sensor.getSensorCategory();
+        this.sensorMeta = sensor.getSensorMeta();
+        this.sensorApiKey = getSensorApiKey();
     }
 }
 

@@ -18,8 +18,7 @@ public class CompanyService {
     private CompanyDAO companyDAO;
 
     public Company save(Company company){
-        String apikey = generateApiKey();
-        company.setCompanyApiKey(apikey);
+        company.setCompanyApiKey(generateApiKey());
         CompanyEntity companyEntity = new CompanyEntity(company);
         companyDAO.save(companyEntity);
         return getCompanyIdByName(companyEntity.getCompanyName());

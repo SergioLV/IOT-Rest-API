@@ -36,8 +36,9 @@ public class LocationEntity {
     @JoinColumn(name = "company_id", insertable = false, updatable = false)
     private CompanyEntity company;
 
-    @OneToMany(mappedBy = "location")
-    private List<SensorEntity> sensors;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "sensor_id", insertable = false, updatable = false)
+    private SensorEntity sensor;
 
     public LocationEntity() {
     }

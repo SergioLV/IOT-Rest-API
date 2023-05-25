@@ -3,6 +3,7 @@ package com.emergentes.iot.service.api;
 import com.emergentes.iot.exceptions.*;
 import com.emergentes.iot.service.responses.ErrorResponse;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.InvalidDataAccessResourceUsageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MissingRequestHeaderException;
@@ -53,6 +54,12 @@ public class IotErrorHandlerController {
     @ExceptionHandler(InvalidApiKeyException.class)
     public ResponseEntity<ErrorResponse> exceptions(InvalidApiKeyException e){
         String message = "Invalid Api Key";
+        LOGGER.error(e.getMessage());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponse(message, Calendar.getInstance().getTimeInMillis()));
+    }
+ @ExceptionHandler(InvalidDataAccessResourceUsageException.class)
+    public ResponseEntity<ErrorResponse> exceptions(InvalidDataAccessResourceUsageException e){
+        String message = e.getMessage();
         LOGGER.error(e.getMessage());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponse(message, Calendar.getInstance().getTimeInMillis()));
     }
