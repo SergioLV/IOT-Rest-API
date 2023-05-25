@@ -7,7 +7,7 @@ CREATE TABLE admin (
 -- Create the "company" table
 CREATE TABLE company (
                          company_id SERIAL PRIMARY KEY,
-                         company_name VARCHAR(255),
+                         company_name VARCHAR(255) UNIQUE,
                          company_api_key VARCHAR(255)
 );
 
@@ -19,7 +19,8 @@ CREATE TABLE location (
                           location_city VARCHAR(255),
                           location_meta VARCHAR(255),
                           company_id INT,
-                          FOREIGN KEY (company_id) REFERENCES company(company_id)
+                          FOREIGN KEY (company_id) REFERENCES company(company_id),
+                          CONSTRAINT uc_company_location UNIQUE (company_id, location_name)
 );
 
 -- Create the "sensor" table

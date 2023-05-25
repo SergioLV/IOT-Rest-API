@@ -1,6 +1,5 @@
 package com.emergentes.iot.dto.responses;
 
-import com.emergentes.iot.model.Company;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,8 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class CompanyResponse {
+public class LocationResponse {
     private String message;
-    private Company company;
-
+    private Long locationId;
 }

@@ -23,6 +23,8 @@ public class TokenDAO {
         tokenRepository.save(tokenEntity);
     }
 
+//    TODO: Get rid of this token and return what should return. Dont insert business logic here.
+    @Transactional(readOnly = true)
     public boolean isValidToken(String token_value){
         TokenEntity tokenEntity = getTokenEntityByTokenValue(token_value);
         return tokenEntity != null && isCreatedWithinSeconds(tokenEntity.getCreatedAt().toString(), 3600);

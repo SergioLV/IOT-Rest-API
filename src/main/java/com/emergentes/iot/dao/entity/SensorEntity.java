@@ -1,7 +1,11 @@
 package com.emergentes.iot.dao.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "sensor")
 public class SensorEntity {

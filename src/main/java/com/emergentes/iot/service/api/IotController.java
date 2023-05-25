@@ -3,17 +3,18 @@ package com.emergentes.iot.service.api;
 
 import com.emergentes.iot.business.AdminService;
 import com.emergentes.iot.business.CompanyService;
+import com.emergentes.iot.business.LocationService;
 import com.emergentes.iot.business.TokenService;
 import com.emergentes.iot.dto.requests.CompanyRequest;
+import com.emergentes.iot.dto.requests.LocationRequest;
 import com.emergentes.iot.dto.requests.LoginRequest;
 import com.emergentes.iot.dto.responses.CompanyResponse;
+import com.emergentes.iot.dto.responses.LocationResponse;
 import com.emergentes.iot.dto.responses.LoginResponse;
-import com.emergentes.iot.exceptions.InvalidTokenException;
-import com.emergentes.iot.exceptions.LoginException;
-import com.emergentes.iot.exceptions.TokenGenerationException;
+import com.emergentes.iot.exceptions.*;
 import com.emergentes.iot.model.Admin;
 import com.emergentes.iot.model.Company;
-import jakarta.servlet.http.HttpServletRequest;
+import com.emergentes.iot.model.Location;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,6 +35,9 @@ public class IotController {
     @Autowired
     private TokenService tokenService;
 
+    @Autowired
+    private LocationService locationService;
+
     @PostMapping(value = "/login")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) throws LoginException, TokenGenerationException {
 
@@ -45,18 +49,23 @@ public class IotController {
     }
 
     @PostMapping(value = "/company")
-    public ResponseEntity<CompanyResponse> companies(@RequestBody CompanyRequest request, HttpServletRequest httpServletRequest) throws InvalidTokenException {
+    public ResponseEntity<CompanyResponse> companies(@RequestBody CompanyRequest request, @RequestHeader("Authorization") String authorizationHeader) throws InvalidTokenException {
         ModelMapper modelMapper = new ModelMapper();
-
-
         Company company = modelMapper.map(request, Company.class);
-        String authToken = httpServletRequest.getHeader("Authorization").substring(7);
+        String authToken = authorizationHeader.substring(7);
         tokenService.checkToken(authToken);
-        String apikey = companyService.save(company);
-
-        CompanyResponse companyResponse = new CompanyResponse("New company added!", apikey);
+        Company cr = companyService.save(company);
+        CompanyResponse companyResponse = new CompanyResponse( "New company added!",cr);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(companyResponse);
+    }
 
+    @PostMapping(value = "/location")
+    public ResponseEntity<LocationResponse> location(@RequestBody LocationRequest request, @RequestHeader("X-Api-Key") String apiKey) throws InvalidCompanyIdException, InvalidApiKeyException {
+        ModelMapper modelMapper = new ModelMapper();
+        Location location = modelMapper.map(request, Location.class);
+        companyService.checkApiKey(request.getCompanyId(), apiKey);
+        Long locationId = locationService.save(location);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(new LocationResponse("New Location Added!", locationId));
     }
 
 
