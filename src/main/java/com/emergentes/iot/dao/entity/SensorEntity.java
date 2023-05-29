@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
 
 @Getter
 @Setter
@@ -43,7 +42,7 @@ public class SensorEntity {
         this.sensorName = sensor.getSensorName();
         this.sensorCategory = sensor.getSensorCategory();
         this.sensorMeta = sensor.getSensorMeta();
-        this.sensorApiKey = getSensorApiKey();
+        this.sensorApiKey = sensor.getSensorApiKey();
     }
 }
 

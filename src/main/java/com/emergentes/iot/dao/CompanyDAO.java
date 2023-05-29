@@ -2,8 +2,6 @@ package com.emergentes.iot.dao;
 
 import com.emergentes.iot.dao.entity.CompanyEntity;
 import com.emergentes.iot.dao.repository.CompanyRepository;
-import com.emergentes.iot.exceptions.CompanyLocationException;
-import com.emergentes.iot.model.Company;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;

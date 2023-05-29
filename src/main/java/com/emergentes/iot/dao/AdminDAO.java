@@ -11,6 +11,10 @@ public class AdminDAO {
     @Autowired
     private AdminRepository adminRepository;
 
+    public void save(AdminEntity adminEntity){
+        adminRepository.save(adminEntity);
+    }
+
     public String getPassword(AdminEntity adminEntity) {
         AdminEntity foundAdminEntity = getAdminEntityByUsername(adminEntity.getUsername());
         return (foundAdminEntity != null) ? foundAdminEntity.getPassword() : null;

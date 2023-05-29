@@ -2,6 +2,7 @@ package com.emergentes.iot.dao.entity;
 
 import com.emergentes.iot.model.Company;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,6 +10,7 @@ import java.util.List;
 
 @Getter
 @Setter
+@AllArgsConstructor
 @Entity
 @Table(name = "company")
 public class CompanyEntity {
@@ -35,4 +37,3 @@ public class CompanyEntity {
         this.companyApiKey = company.getCompanyApiKey();
     }
 }
-

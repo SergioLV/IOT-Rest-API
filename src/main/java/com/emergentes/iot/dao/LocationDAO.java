@@ -2,7 +2,6 @@ package com.emergentes.iot.dao;
 
 import com.emergentes.iot.dao.entity.LocationEntity;
 import com.emergentes.iot.dao.repository.LocationRepository;
-import com.emergentes.iot.exceptions.CompanyLocationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
@@ -15,9 +14,10 @@ public class LocationDAO {
     private LocationRepository locationRepository;
 
     @Transactional
-    public void save(LocationEntity locationEntity){
+    public Long save(LocationEntity locationEntity){
         try{
-            locationRepository.save(locationEntity);
+            LocationEntity response = locationRepository.save(locationEntity);
+            return response.getLocationId();
         }catch(DataIntegrityViolationException e){
             throw new DataIntegrityViolationException("The location " + locationEntity.getLocationName() + " is already assigned to the company id " + locationEntity.getCompanyId().toString());
         }

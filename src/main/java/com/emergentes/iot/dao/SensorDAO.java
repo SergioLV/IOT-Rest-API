@@ -15,15 +15,15 @@ public class SensorDAO {
     private SensorRepository sensorRepository;
 
     @Transactional
-    public void save(SensorEntity sensorEntity){
+    public SensorEntity save(SensorEntity sensorEntity){
         try{
-            sensorRepository.save(sensorEntity);
+            return sensorRepository.save(sensorEntity);
         }catch(InvalidDataAccessResourceUsageException e){
             throw new InvalidDataAccessResourceUsageException("Company id" + sensorEntity.getSensorId() + " does not exists.");
         }
     }
 
-    public SensorEntity getSensorBySensorNameBySensorApiKey(String sensorName, String sensorApiKey){
-        return sensorRepository.findBySensorNameAndSensorApiKey(sensorName, sensorApiKey);
+    public SensorEntity findSensorDataByApiKey(String apiKey){
+        return sensorRepository.findBySensorApiKey(apiKey);
     }
 }

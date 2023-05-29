@@ -1,7 +1,6 @@
 package com.emergentes.iot.business;
 
 import com.emergentes.iot.dao.AdminDAO;
-import com.emergentes.iot.dao.TokenDAO;
 import com.emergentes.iot.dao.entity.AdminEntity;
 import com.emergentes.iot.exceptions.LoginException;
 import com.emergentes.iot.exceptions.TokenGenerationException;
@@ -15,9 +14,6 @@ public class AdminService {
 
     @Autowired
     private AdminDAO adminDAO;
-
-    @Autowired
-    private TokenDAO tokenDAO;
 
     @Autowired
     private TokenService tokenService;

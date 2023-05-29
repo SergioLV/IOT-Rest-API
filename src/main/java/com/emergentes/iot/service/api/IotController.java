@@ -2,24 +2,20 @@ package com.emergentes.iot.service.api;
 
 
 import com.emergentes.iot.business.*;
-import com.emergentes.iot.dto.requests.CompanyRequest;
-import com.emergentes.iot.dto.requests.LocationRequest;
-import com.emergentes.iot.dto.requests.LoginRequest;
-import com.emergentes.iot.dto.requests.SensorRequest;
-import com.emergentes.iot.dto.responses.CompanyResponse;
-import com.emergentes.iot.dto.responses.LocationResponse;
-import com.emergentes.iot.dto.responses.LoginResponse;
-import com.emergentes.iot.dto.responses.SensorResponse;
+import com.emergentes.iot.dto.requests.*;
+import com.emergentes.iot.dto.responses.*;
 import com.emergentes.iot.exceptions.*;
 import com.emergentes.iot.model.Admin;
 import com.emergentes.iot.model.Company;
 import com.emergentes.iot.model.Location;
 import com.emergentes.iot.model.Sensor;
+import com.emergentes.iot.model.humidity.HumiditySensor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 
 
 @RestController
@@ -78,5 +74,14 @@ public class IotController {
         tokenService.checkToken(authToken);
         Sensor sensorResponse  = sensorService.save(sensor);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(new SensorResponse("New Sensor added!", sensorResponse));
+    }
+
+    @PostMapping(value = "/data/humidity")
+    public ResponseEntity<HumiditySensorResponse> humidityData(@RequestBody HumiditySensorRequest request) throws InvalidApiKeyException{
+        ModelMapper modelMapper = new ModelMapper();
+        HumiditySensor humiditySensor = modelMapper.map(request, HumiditySensor.class);
+        sensorService.retrieveSensorDataByApiKey(humiditySensor.getApiKey());
+        sensorService.saveHumidityData(humiditySensor);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(new HumiditySensorResponse("Data retreived successfully!"));
     }
 }

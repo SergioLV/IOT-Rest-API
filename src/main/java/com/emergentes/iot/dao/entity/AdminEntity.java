@@ -2,8 +2,14 @@ package com.emergentes.iot.dao.entity;
 
 import com.emergentes.iot.model.Admin;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 
+@Getter
+@Setter
+@AllArgsConstructor
 @Entity
 @Table(name = "admin")
 public class AdminEntity {
@@ -21,21 +27,5 @@ public class AdminEntity {
 
     public AdminEntity() {
 
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 }
