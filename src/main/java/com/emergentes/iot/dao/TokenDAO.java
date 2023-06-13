@@ -27,7 +27,7 @@ public class TokenDAO {
     @Transactional(readOnly = true)
     public boolean isValidToken(String token_value){
         TokenEntity tokenEntity = getTokenEntityByTokenValue(token_value);
-        return tokenEntity != null && isCreatedWithinSeconds(tokenEntity.getCreatedAt().toString(), 3600);
+        return tokenEntity != null;
     }
 
     private TokenEntity getTokenEntityByTokenValue(String token_value){

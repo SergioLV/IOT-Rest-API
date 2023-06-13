@@ -18,7 +18,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
-
 @RestController
 @RequestMapping("/api/v1")
 public class IotController {
@@ -84,19 +83,27 @@ public class IotController {
     public ResponseEntity<HumiditySensorResponse> humidityData(@RequestBody HumiditySensorRequest request) throws InvalidApiKeyException{
         ModelMapper modelMapper = new ModelMapper();
         HumiditySensor humiditySensor = modelMapper.map(request, HumiditySensor.class);
-        Long sensorId = sensorService.retrieveSensorDataByApiKey(humiditySensor.getApiKey());
+        Long sensorId = sensorService.retrieveSensorByApiKey(humiditySensor.getApiKey());
         humiditySensor.setSensorId(sensorId);
         sensorService.saveHumidityData(humiditySensor);
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(new HumiditySensorResponse("Data retreived successfully!"));
+        return ResponseEntity.status(HttpStatus.CREATED).body(new HumiditySensorResponse("Data retreived successfully!"));
     }
 
     @PostMapping(value = "/data/temperature")
     public ResponseEntity<HumiditySensorResponse> temperatureData(@RequestBody TemperatureSensorRequest request) throws InvalidApiKeyException{
         ModelMapper modelMapper = new ModelMapper();
         TemperatureSensor temperatureSensor = modelMapper.map(request, TemperatureSensor.class);
-        Long sensorId = sensorService.retrieveSensorDataByApiKey(temperatureSensor.getApiKey());
+        Long sensorId = sensorService.retrieveSensorByApiKey(temperatureSensor.getApiKey());
         temperatureSensor.setSensorId(sensorId);
         sensorService.saveTemperatureData(temperatureSensor);
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(new HumiditySensorResponse("Data retreived successfully!"));
+        return ResponseEntity.status(HttpStatus.CREATED).body(new HumiditySensorResponse("Data retreived successfully!"));
+    }
+
+    @GetMapping(value = "/sensor_data")
+    public ResponseEntity<String> getSensorData(@RequestBody SensorDataRequest request) throws InvalidCompanyIdException, InvalidApiKeyException {
+        companyService.checkApiKey(request.getCompanyId(), request.getCompanyApiKey());
+        
+
+        return ResponseEntity.status(HttpStatus.CREATED).body("");
     }
 }

@@ -12,7 +12,6 @@ import com.emergentes.iot.model.humidity.HumiditySensor;
 import com.emergentes.iot.model.humidity.HumiditySensorData;
 import com.emergentes.iot.model.temperature.TemperatureSensor;
 import com.emergentes.iot.model.temperature.TemperatureSensorData;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -60,13 +59,15 @@ public class SensorService {
         }
     }
 
-    public Long retrieveSensorDataByApiKey(String apiKey) throws InvalidApiKeyException {
-        SensorEntity sensorEntity = sensorDAO.findSensorDataByApiKey(apiKey);
+    public Long retrieveSensorByApiKey(String apiKey) throws InvalidApiKeyException {
+        SensorEntity sensorEntity = sensorDAO.findSensorByApiKey(apiKey);
         if(sensorEntity == null){
             throw new InvalidApiKeyException("Invalid api key");
         }
         return sensorEntity.getSensorId();
     }
+
+    public void retreiveBulkSensorData()
     private String generateApiKey(){
         return UUID.randomUUID().toString();
     }

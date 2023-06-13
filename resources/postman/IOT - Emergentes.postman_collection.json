@@ -215,6 +215,70 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "New data for Temperature",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"apiKey\": \"cfb64482-535c-4697-a522-07ce74695e16\",\r\n    \"jsonData\": [\r\n        {\r\n            \"date\": \"2023-05-28T15:30:45.123456789\",\r\n            \"temperature\": 13.11\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/data/temperature",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"data",
+						"temperature"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Request",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"companyId\": 1,\r\n  \"companyApiKey\": \"166276fb-3c1a-402c-b3b6-59a0f129eb65\",\r\n  \"from\": \"2023-06-12T10:00:00\",\r\n  \"to\": \"2023-06-12T18:00:00\",\r\n  \"sensorsId\": [1, 2, 3, 4, 5]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/sensor_data",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"sensor_data"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }

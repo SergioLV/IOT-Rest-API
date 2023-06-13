@@ -2,7 +2,6 @@ package com.emergentes.iot.business;
 
 import com.emergentes.iot.dao.CompanyDAO;
 import com.emergentes.iot.dao.entity.CompanyEntity;
-import com.emergentes.iot.exceptions.CompanyLocationException;
 import com.emergentes.iot.exceptions.InvalidApiKeyException;
 import com.emergentes.iot.exceptions.InvalidCompanyIdException;
 import com.emergentes.iot.model.Company;

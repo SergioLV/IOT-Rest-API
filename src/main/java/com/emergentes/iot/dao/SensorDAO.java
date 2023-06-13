@@ -23,7 +23,7 @@ public class SensorDAO {
         }
     }
 
-    public SensorEntity findSensorDataByApiKey(String apiKey){
+    public SensorEntity findSensorByApiKey(String apiKey){
         return sensorRepository.findBySensorApiKey(apiKey);
     }
 }
