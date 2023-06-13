@@ -17,6 +17,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Map;
+
 
 @RestController
 @RequestMapping("/api/v1")
@@ -100,10 +103,9 @@ public class IotController {
     }
 
     @GetMapping(value = "/sensor_data")
-    public ResponseEntity<String> getSensorData(@RequestBody SensorDataRequest request) throws InvalidCompanyIdException, InvalidApiKeyException {
+    public ResponseEntity<Map<String, List<Map<String, Object>>>> getSensorData(@RequestBody SensorDataRequest request) throws InvalidCompanyIdException, InvalidApiKeyException {
         companyService.checkApiKey(request.getCompanyId(), request.getCompanyApiKey());
-        
-
-        return ResponseEntity.status(HttpStatus.CREATED).body("");
+        Map<String, List<Map<String, Object>>> response = sensorService.retreiveBulkSensorData(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 }

@@ -11,7 +11,7 @@ import java.util.List;
 public class SensorDataRequest {
     private Long companyId;
     private String companyApiKey;
-    private LocalDateTime from;
-    private LocalDateTime to;
+    private Long from;
+    private Long to;
     private List<Integer> sensorsId;
 }

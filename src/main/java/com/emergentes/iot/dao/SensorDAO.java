@@ -23,6 +23,12 @@ public class SensorDAO {
         }
     }
 
+    @Transactional
+    public SensorEntity findById(int id){
+        return sensorRepository.findBySensorId((long) id);
+    }
+
+
     public SensorEntity findSensorByApiKey(String apiKey){
         return sensorRepository.findBySensorApiKey(apiKey);
     }

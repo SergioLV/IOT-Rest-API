@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface SensorRepository extends JpaRepository<SensorEntity, Integer> {
     SensorEntity findBySensorApiKey(String apiKey);
+    SensorEntity findBySensorId(Long sensorId);
 }

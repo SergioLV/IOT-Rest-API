@@ -6,6 +6,7 @@ import com.emergentes.iot.dao.TemperatureSensorDAO;
 import com.emergentes.iot.dao.entity.HumiditySensorsDataEntity;
 import com.emergentes.iot.dao.entity.SensorEntity;
 import com.emergentes.iot.dao.entity.TemperatureSensorsDataEntity;
+import com.emergentes.iot.dto.requests.SensorDataRequest;
 import com.emergentes.iot.exceptions.InvalidApiKeyException;
 import com.emergentes.iot.model.Sensor;
 import com.emergentes.iot.model.humidity.HumiditySensor;
@@ -15,8 +16,10 @@ import com.emergentes.iot.model.temperature.TemperatureSensorData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.UUID;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.*;
 
 @Service
 public class SensorService {
@@ -66,8 +69,46 @@ public class SensorService {
         }
         return sensorEntity.getSensorId();
     }
+//TODO: Refactor this
+    public Map<String, List<Map<String, Object>>> retreiveBulkSensorData(SensorDataRequest request){
+        Map<String, List<Map<String, Object>>> dataMap = new HashMap<>();
+        List<Map<String, Object>> humidityList = new ArrayList<>();
+        List<Map<String, Object>> temperatureList = new ArrayList<>();
+        for(int id: request.getSensorsId()){
+            String category = checkSensorCategory(id);
+            if(category.equals("Humidity")){
+                LocalDateTime from = convertEpochToLocalDateTime(request.getFrom());
+                LocalDateTime to = convertEpochToLocalDateTime(request.getTo());
+                List<HumiditySensorsDataEntity> humidityDataBetweenDates = humiditySensorDAO.getDataBetweenDates(from, to);
+                Map<String, Object> humidityData = new HashMap<>();
+                humidityData.put("id", id);
+                humidityData.put("data", humidityDataBetweenDates);
+                humidityList.add(humidityData);
+            }
+            if(category.equals("Temperature")){
+                LocalDateTime from = convertEpochToLocalDateTime(request.getFrom());
+                LocalDateTime to = convertEpochToLocalDateTime(request.getTo());
+                List<TemperatureSensorsDataEntity> temperatureDataBetweenDates = temperatureSensorDAO.getDataBetweenDates(from, to);
+                Map<String, Object> temperatureData = new HashMap<>();
+                temperatureData.put("id", id);
+                temperatureData.put("data", temperatureDataBetweenDates);
+                temperatureList.add(temperatureData);
+            }
+        }
+        dataMap.put("humidity", humidityList);
+        dataMap.put("temperature", temperatureList);
+        return dataMap;
+    }
 
-    public void retreiveBulkSensorData()
+
+    private String checkSensorCategory(int id){
+        SensorEntity sensorEntity = sensorDAO.findById(id);
+        return sensorEntity.getSensorCategory();
+    }
+    private LocalDateTime convertEpochToLocalDateTime(long epochTimestamp) {
+        Instant instant = Instant.ofEpochSecond(epochTimestamp);
+        return LocalDateTime.ofInstant(instant, ZoneOffset.UTC);
+    }
     private String generateApiKey(){
         return UUID.randomUUID().toString();
     }
