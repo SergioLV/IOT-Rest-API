@@ -10,6 +10,7 @@ import com.emergentes.iot.model.Company;
 import com.emergentes.iot.model.Location;
 import com.emergentes.iot.model.Sensor;
 import com.emergentes.iot.model.humidity.HumiditySensor;
+import com.emergentes.iot.model.temperature.TemperatureSensor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -67,7 +68,10 @@ public class IotController {
     }
 
     @PostMapping(value = "/sensor")
-    public ResponseEntity<SensorResponse> sensor(@RequestBody SensorRequest request, @RequestHeader("Authorization") String authorizationHeader) throws InvalidTokenException {
+    public ResponseEntity<SensorResponse> sensor(@RequestBody SensorRequest request, @RequestHeader("Authorization") String authorizationHeader) throws InvalidTokenException, BadCategoryException {
+        if(!request.getSensorCategory().equals("Humidity") && !request.getSensorCategory().equals("Temperature")){
+            throw new BadCategoryException("Category not supported");
+        }
         ModelMapper modelMapper = new ModelMapper();
         Sensor sensor = modelMapper.map(request, Sensor.class);
         String authToken = authorizationHeader.substring(7);
@@ -80,8 +84,19 @@ public class IotController {
     public ResponseEntity<HumiditySensorResponse> humidityData(@RequestBody HumiditySensorRequest request) throws InvalidApiKeyException{
         ModelMapper modelMapper = new ModelMapper();
         HumiditySensor humiditySensor = modelMapper.map(request, HumiditySensor.class);
-        sensorService.retrieveSensorDataByApiKey(humiditySensor.getApiKey());
+        Long sensorId = sensorService.retrieveSensorDataByApiKey(humiditySensor.getApiKey());
+        humiditySensor.setSensorId(sensorId);
         sensorService.saveHumidityData(humiditySensor);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(new HumiditySensorResponse("Data retreived successfully!"));
+    }
+
+    @PostMapping(value = "/data/temperature")
+    public ResponseEntity<HumiditySensorResponse> temperatureData(@RequestBody TemperatureSensorRequest request) throws InvalidApiKeyException{
+        ModelMapper modelMapper = new ModelMapper();
+        TemperatureSensor temperatureSensor = modelMapper.map(request, TemperatureSensor.class);
+        Long sensorId = sensorService.retrieveSensorDataByApiKey(temperatureSensor.getApiKey());
+        temperatureSensor.setSensorId(sensorId);
+        sensorService.saveTemperatureData(temperatureSensor);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(new HumiditySensorResponse("Data retreived successfully!"));
     }
 }

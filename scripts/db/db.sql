@@ -50,4 +50,11 @@ CREATE TABLE humidity_sensors_data (
                                  percentage DECIMAL(6, 4)
 );
 
+CREATE TABLE temperature_sensors_data (
+                                       temperature_sensor_id SERIAL PRIMARY KEY,
+                                       sensor_id INT,
+                                       timestamp TIMESTAMP,
+                                       temperature DECIMAL(6, 4)
+);
+
 INSERT INTO admin (username, password) VALUES ('admin', '511bc56250dfd22b78f2aa0fc18959fe2c661a5441d0053ddcfe30fd4834018460b8bb840b9d4f0024a15313958b8a81ad57c05fc6791f89ede299cfead3297e');

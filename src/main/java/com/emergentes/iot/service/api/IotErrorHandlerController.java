@@ -30,6 +30,7 @@ public class IotErrorHandlerController {
         LOGGER.error(e.getMessage());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponse(message, Calendar.getInstance().getTimeInMillis()));
     }
+
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<ErrorResponse> exceptions(DataIntegrityViolationException e){
         String message = e.getMessage();
@@ -64,11 +65,14 @@ public class IotErrorHandlerController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponse(message, Calendar.getInstance().getTimeInMillis()));
     }
 
-
-
     @ExceptionHandler(InvalidTokenException.class)
     public ResponseEntity<ErrorResponse> exceptions(InvalidTokenException e){
         String message = "Invalid Token";
+        LOGGER.error(e.getMessage());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponse(message, Calendar.getInstance().getTimeInMillis()));
+    }@ExceptionHandler(BadCategoryException.class)
+    public ResponseEntity<ErrorResponse> exceptions(BadCategoryException e){
+        String message = "Sorry, category not supported. :(";
         LOGGER.error(e.getMessage());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponse(message, Calendar.getInstance().getTimeInMillis()));
     }
