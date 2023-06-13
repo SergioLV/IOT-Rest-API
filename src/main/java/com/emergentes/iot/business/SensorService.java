@@ -94,6 +94,7 @@ public class SensorService {
                 temperatureData.put("data", temperatureDataBetweenDates);
                 temperatureList.add(temperatureData);
             }
+
         }
         dataMap.put("humidity", humidityList);
         dataMap.put("temperature", temperatureList);
@@ -103,6 +104,9 @@ public class SensorService {
 
     private String checkSensorCategory(int id){
         SensorEntity sensorEntity = sensorDAO.findById(id);
+        if(sensorEntity == null){
+            return "";
+        }
         return sensorEntity.getSensorCategory();
     }
     private LocalDateTime convertEpochToLocalDateTime(long epochTimestamp) {
